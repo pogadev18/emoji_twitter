@@ -9,8 +9,6 @@ import type { RouterOutputs } from "~/utils/api";
 const CreatePostWizard = () => {
   const { user } = useUser();
 
-  console.log("user >>", user);
-
   if (!user) return null;
 
   return (
@@ -35,7 +33,12 @@ type PostWithUser = RouterOutputs["posts"]["getAll"][number];
 const PostView = (props: PostWithUser) => {
   const { content, author } = props;
 
-  return <article className="border-b border-slate-400 p-8">{content}</article>;
+  return (
+    <article className="border-b border-slate-400 p-8">
+      {content}
+      <p>{author.username}</p>
+    </article>
+  );
 };
 
 const Home: NextPage = () => {

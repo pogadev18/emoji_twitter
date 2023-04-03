@@ -34,9 +34,19 @@ const PostView = (props: PostWithUser) => {
   const { content, author } = props;
 
   return (
-    <article className="border-b border-slate-400 p-8">
-      {content}
-      <p>{author.username}</p>
+    <article className="flex gap-3 border-b border-slate-400 p-4">
+      <Image
+        width="30"
+        height="30"
+        src={author.profileImageUrl}
+        alt="profile image"
+      />
+      <div className="flex flex-col">
+        <div className="flex">
+          <span>@{author.username}</span>
+        </div>
+        <span>{content}</span>
+      </div>
     </article>
   );
 };

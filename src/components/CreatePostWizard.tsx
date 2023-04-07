@@ -5,14 +5,17 @@ import { useState } from "react";
 import { api } from "~/utils/api";
 
 const CreatePostWizard = () => {
+  // trpc cache context
+  const ctx = api.useContext();
+
   const [emoji, setEmoji] = useState("");
   const { user } = useUser();
-  const { mutate, isLoading: creatingPost } = api.posts.create.useMutation();
-
-  const createPost = () => {
-    mutate({ content: emoji });
-    setEmoji("");
-  };
+  const { mutate, isLoading: creatingPost } = api.posts.create.useMutation({
+    onSuccess: () => {
+      setEmoji("");
+      void ctx.posts.getAll.invalidate();
+    },
+  });
 
   if (!user) return null;
 
@@ -31,8 +34,9 @@ const CreatePostWizard = () => {
         type="text"
         placeholder="type some emojis"
         className="w-full bg-transparent outline-none"
+        disabled={creatingPost}
       />
-      <button onClick={createPost}>Post</button>
+      <button onClick={() => mutate({ content: emoji })}>Post</button>
     </div>
   );
 };

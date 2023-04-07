@@ -1,17 +1,20 @@
 import { type NextPage } from "next";
 import { SignInButton, useUser } from "@clerk/nextjs";
-
 import Head from "next/head";
+
+import CreatePostWizard from "~/components/CreatePostWizard";
+import PostsFeed from "~/components/PostsFeed";
+
 import { api } from "~/utils/api";
-import PostView from "./components/PostView";
-import CreatePostWizard from "./components/CreatePostWizard";
 
 const Home: NextPage = () => {
-  const user = useUser();
-  const { data: posts, isLoading: postsLoading } = api.posts.getAll.useQuery();
+  const { isLoaded: userLoaded, isSignedIn } = useUser();
 
-  if (postsLoading) return <p>loading posts...</p>;
-  if (!posts) return <p>something went wrong</p>;
+  // start fetching posts ASAP
+  api.posts.getAll.useQuery();
+
+  // return empty div if user isn't loaded
+  if (!userLoaded) return <div />;
 
   return (
     <>
@@ -23,18 +26,14 @@ const Home: NextPage = () => {
       <main className="flex h-screen justify-center">
         <div className="w-full border-x border-slate-400 md:max-w-2xl">
           <div className="border-b border-slate-400 p-4">
-            {!user.isSignedIn && (
+            {!isSignedIn && (
               <SignInButton mode="modal">
                 <button className="btn">Sign in</button>
               </SignInButton>
             )}
-            {user.isSignedIn && <CreatePostWizard />}
+            {isSignedIn && <CreatePostWizard />}
           </div>
-          <div className="flex flex-col">
-            {posts.map((post) => (
-              <PostView key={post.id} {...post} />
-            ))}
-          </div>
+          <PostsFeed />
         </div>
       </main>
     </>

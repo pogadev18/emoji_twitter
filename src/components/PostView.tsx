@@ -16,7 +16,7 @@ const PostView = (props: PostWithUser) => {
   return (
     <article className="flex gap-3 border-b border-slate-400 p-4">
       <Image
-        src={author.profileImageUrl}
+        src={author?.profileImageUrl}
         className="h-12 w-12 rounded-full"
         alt={`@${author.username}'s profile picture`}
         width={56}

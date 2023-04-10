@@ -12,7 +12,7 @@ type PostWithUser = RouterOutputs["posts"]["getAll"][number];
 
 const PostView = (props: PostWithUser) => {
   const { content, author, createdAt, id } = props;
-
+    
   return (
     <article className="flex gap-3 border-b border-slate-400 p-4">
       <Image

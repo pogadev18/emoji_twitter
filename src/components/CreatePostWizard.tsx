@@ -46,6 +46,14 @@ const CreatePostWizard = () => {
         placeholder="type some emojis"
         className="w-full bg-transparent outline-none"
         disabled={creatingPost}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            if (emoji !== "") {
+              mutate({ content: emoji });
+            }
+          }
+        }}
       />
       {emoji !== "" && !creatingPost && (
         <button
